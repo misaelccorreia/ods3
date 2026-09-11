@@ -1,0 +1,12 @@
+### IntelliJ IDEA (raiz do projeto) ###
+.idea/
+*.iml
+*.iws
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### Sistema operacional ###
+.DS_Store
+*~
