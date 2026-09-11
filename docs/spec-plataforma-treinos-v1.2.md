@@ -259,6 +259,9 @@ private Map<String, TipoAvaliacao> avaliacoes = new HashMap<>();
 
 A chave do mapa (`email`) garante, por construção, no máximo uma avaliação por usuário — não é necessária constraint de unicidade adicional nem lógica de "buscar se existe, senão criar". No MongoDB, esse mapa é serializado automaticamente como um sub-documento aninhado dentro do `Comentario`, que por sua vez está aninhado dentro do `Treino` — não existe tabela auxiliar como `comentario_avaliacao` (essa era uma necessidade específica de JPA/relacional, Seção 18 da v1.1).
 
+**Nota de implementação (adicionada em 2026-09-09, durante a F01-T04):** o MongoDB não aceita **ponto em nome de campo** de sub-documento, e todo e-mail tem ponto — então gravar `avaliacoes` com a chave crua falha com *"Map key ... contains dots but no replacement was configured"*. A solução adotada mantém a modelagem desta seção intacta: o `MappingMongoConverter` é configurado com `setMapKeyDotReplacement("[dot]")` (classe `MongoConfig`), que troca o ponto na gravação e desfaz a troca na leitura. Em Java a chave continua sendo o e-mail real; no banco ela aparece como `ana@exemplo[dot]com`. A sequência `[dot]` foi escolhida por não ser válida em endereço de e-mail — um substituto comum como `_` corromperia `joao_silva@gmail.com`, que voltaria do banco como `joao.silva@gmail.com`. Vale só para **chaves** de mapa: campos que guardam e-mail como *valor* (`autorEmail`) seguem com o ponto normal.
+
+
 Comportamento de domínio (no próprio Model `Comentario`):
 
 ```java
@@ -657,6 +660,8 @@ treinos
 ```
 
 Não existem `_id` próprios para os itens de `comentarios` nem para as entradas de `avaliacoes` — ambos são estruturas embutidas dentro do documento `Treino`, endereçadas por `numero` (comentário) e `email` (avaliação), nunca por um id técnico. Isso substitui por completo o desenho relacional da v1.1 (tabelas `usuario`, `treino`, `comentario`, `comentario_avaliacao` com chaves estrangeiras).
+
+As chaves de `avaliacoes` são gravadas com o ponto escapado (`"email1@dominio[dot]com"`) — ver nota de implementação na Seção 7.2.
 
 Índices únicos necessários:
 

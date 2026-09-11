@@ -1,6 +1,8 @@
 package com.projeto.ods3.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,12 @@ public class    Treino {
 
     /** Auditoria. Sem setter: definido na criação e nunca alterado depois. */
     private LocalDateTime dataCriacao;
+
+    /**
+     * Comentários embutidos — array de sub-documentos dentro do próprio Treino,
+     * não uma coleção separada. É esta lista que o ComentarioService manipula.
+     */
+    private List<Comentario> comentarios = new ArrayList<>();
 
     public Treino(String nome, String descricao, String autorNome, String autorEmail) {
         this.nome = nome;

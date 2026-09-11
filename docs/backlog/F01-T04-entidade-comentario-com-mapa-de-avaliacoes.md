@@ -15,6 +15,7 @@ Modelar `Comentario` como estrutura **embutida** (não `@Document`, não coleç�
 - Criar classe `Comentario` **sem** `@Document` e **sem** `@Id` — é um objeto simples (POJO), serializado pelo Spring Data MongoDB como sub-documento embutido dentro de `Treino`.
 - Campos: `numero` (int — sequencial dentro do treino, atribuído pelo `ComentarioService` na criação, F05-T04; o Model apenas guarda o valor, não o calcula), `texto`, `autorNome`, `autorEmail`, `dataCriacao`.
 - Adicionar `private Map<String, TipoAvaliacao> avaliacoes = new HashMap<>()` — chave é o **`email`** do usuário que votou (não um id técnico).
+- **Pré-requisito descoberto na execução:** o MongoDB rejeita ponto em nome de campo, e e-mail sempre tem ponto. É preciso configurar `MappingMongoConverter.setMapKeyDotReplacement("[dot]")` (classe `MongoConfig`), senão qualquer avaliação falha ao gravar. Ver nota na Seção 7.2 da spec.
 - Implementar `public void registrarAvaliacao(String email, TipoAvaliacao tipo)` — `avaliacoes.put(email, tipo)` (upsert natural do Map).
 - Implementar `public int calcularScore()` — conta `LIKE` menos `DISLIKE` no mapa.
 - Não expor setter para `texto` após a criação — reforça a imutabilidade descrita na Seção 6.1 (nenhum método de alteração de texto deve existir na classe).
