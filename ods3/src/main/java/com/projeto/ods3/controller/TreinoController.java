@@ -5,11 +5,15 @@ import java.util.List;
 
 import com.projeto.ods3.dto.treino.TreinoRequestDTO;
 import com.projeto.ods3.dto.treino.TreinoResponseDTO;
+import com.projeto.ods3.exception.TreinoNaoEncontradoException;
 import com.projeto.ods3.service.TreinoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,5 +51,10 @@ public class TreinoController {
     @GetMapping("/{nome}")
     public TreinoResponseDTO buscar(@PathVariable String nome) {
         return treinoService.buscarPorNome(nome);
+    }
+
+    @ExceptionHandler(TreinoNaoEncontradoException.class)
+    public ProblemDetail treinoNaoEncontrado(TreinoNaoEncontradoException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
     }
 }
