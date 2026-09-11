@@ -663,6 +663,8 @@ Não existem `_id` próprios para os itens de `comentarios` nem para as entradas
 
 As chaves de `avaliacoes` são gravadas com o ponto escapado (`"email1@dominio[dot]com"`) — ver nota de implementação na Seção 7.2.
 
+O documento `treinos` tem ainda um campo técnico `versao` (`@Version` do Spring Data), adicionado na F05-T04: como comentar e votar regravam o treino inteiro, duas gravações simultâneas no mesmo treino fariam a segunda apagar o comentário ou voto da primeira. Com o controle de versão, a gravação em conflito falha e o `ComentarioService` relê o treino e tenta de novo. Assim como o `_id`, `versao` nunca aparece na API.
+
 Índices únicos necessários:
 
 * `email` na coleção `usuarios`;

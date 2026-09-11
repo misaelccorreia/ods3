@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -41,6 +42,13 @@ public class    Treino {
 
     @Setter
     private String autorEmail;
+
+    /**
+     * Controle de concorrência otimista. Comentar e votar regravam o treino inteiro; sem isso,
+     * duas gravações simultâneas no mesmo treino fariam a segunda apagar a primeira.
+     */
+    @Version
+    private Long versao;
 
     /** Auditoria. Sem setter: definido na criação e nunca alterado depois. */
     private LocalDateTime dataCriacao;
