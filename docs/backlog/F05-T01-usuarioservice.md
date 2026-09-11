@@ -14,7 +14,7 @@ Implementar o cadastro de usuário com hash de senha e validação de e-mail ún
 
 - Validar, antes de salvar, que o e-mail ainda não está cadastrado (`existsByEmail`) — lançar exceção de negócio caso já exista (ver F07-T01).
 - Aplicar `PasswordEncoder.encode(senha)` antes de persistir.
-- Converter `UsuarioRequestDTO` → `Usuario` → `UsuarioResponseDTO` (o `id` do documento salvo, gerado pelo MongoDB, entra no DTO de resposta como `String`).
+- Converter `UsuarioRequestDTO` → `Usuario` → `UsuarioResponseDTO` (sem `id` — ver revisão da F04-T01).
 
 ## Entregáveis
 

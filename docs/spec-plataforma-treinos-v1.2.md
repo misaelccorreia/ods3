@@ -561,7 +561,7 @@ O Controller **não deve implementar regras de negócio**.
 
 ```text
 UsuarioRequestDTO       (nome, email, senha)
-UsuarioResponseDTO      (id, nome, email)                          // id: String (Mongo)
+UsuarioResponseDTO      (nome, email)                              // sem id: usuário é identificado pelo email
 
 LoginRequestDTO         (email, senha)
 LoginResponseDTO        (token)
@@ -573,7 +573,7 @@ ComentarioRequestDTO    (texto)                                    // sem autor/
 ComentarioResponseDTO   (numero, texto, autorNome, autorEmail, dataCriacao, likes, dislikes, score)
 ```
 
-`TreinoResponseDTO` e `ComentarioResponseDTO` não expõem `id` técnico — `Treino` já se identifica por `nome` (que o DTO já carrega) e `Comentario` por `numero`. `UsuarioResponseDTO` é a única exceção: mantém `id` (String) só como referência de exibição, já que `Usuario` não é endereçado por id em nenhum endpoint (é endereçado por `email` no login e no token).
+`TreinoResponseDTO` e `ComentarioResponseDTO` não expõem `id` técnico — `Treino` já se identifica por `nome` (que o DTO já carrega) e `Comentario` por `numero`. `UsuarioResponseDTO` também não expõe `id`: `Usuario` é identificado por `email` em toda a API. *(Decisão de 2026-09-11, durante a F04-T01: versões anteriores deste documento mantinham `id` aqui como "única exceção", o que contradizia o princípio da Seção 4 e o critério da Seção 21 de que nenhum endpoint expõe id técnico — prevaleceu a regra geral.)*
 
 Não há `AvaliacaoRequestDTO` — os endpoints de like/dislike não recebem corpo; o comentário (via `numero` na URL) e o usuário (via token) já identificam a operação.
 
